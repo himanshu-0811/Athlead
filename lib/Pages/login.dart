@@ -185,3 +185,4 @@ class _RegisterPanelState extends State<_RegisterPanel> {
     );
   }
 }
+
