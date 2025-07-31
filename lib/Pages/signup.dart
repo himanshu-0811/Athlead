@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-
+import 'main.dart'; // Make sure Athlead() is defined in main.dart
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,7 +28,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(), // dismiss keyboard
+        onTap: () => FocusScope.of(context).unfocus(), // Dismiss keyboard
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -106,6 +105,7 @@ class _RegisterPanelState extends State<_RegisterPanel> {
                       'Password',
                       _password,
                       obscure: true,
+                      keyboard: TextInputType.visiblePassword,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password required';
@@ -118,39 +118,47 @@ class _RegisterPanelState extends State<_RegisterPanel> {
                         return null;
                       },
                     ),
-
                     _buildText(
                       'Age',
                       _age,
                       keyboard: TextInputType.number,
-                      validator: (v) => (v == null || v.isEmpty)
-                          ? 'Age required'
-                          : null,
+                      validator: (v) =>
+                      (v == null || v.isEmpty) ? 'Age required' : null,
                     ),
                     _buildText(
                       'Phone number',
                       _phone,
                       keyboard: TextInputType.phone,
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Phone required';
+                        if (!RegExp(r'^\d{10}$').hasMatch(v)) {
+                          return 'Enter a 10-digit number';
+                        }
+                        return null;
+                      },
                     ),
                     _buildText(
                       'Email',
                       _email,
                       keyboard: TextInputType.emailAddress,
-                      validator: (v) =>
-                      (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
+                      validator: (v) => (v == null || !v.contains('@'))
+                          ? 'Enter a valid email'
+                          : null,
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Athlead()),
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            // Only navigate if form is valid
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Athlead()),
+                            );
+                          }
                         },
-
                         child: const Text('REGISTER'),
                       ),
                     ),
@@ -183,3 +191,4 @@ class _RegisterPanelState extends State<_RegisterPanel> {
     );
   }
 }
+
